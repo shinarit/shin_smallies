@@ -1,0 +1,46 @@
+sorszám             automatikus
+tenyészetnév          szöveg
+név                   szöveg
+becenév               szöveg
+született             dátum
+elpusztult            dátum
+apa                   másik sün sorszáma
+anya                  másik sün sorszáma
+szín                  szöveg
+nem                   hím/nőstény 
+státusz               saját/kölyök/vendég/felmenő/kölyök itt
+egyéb                 sok szöveg
+tartózkodási          otthon/
+
+Sajátnak:
+  érkezés               dátum
+  távozás               dátum
+  súly                  több érték dátum szerint rögzítve
+  súly státusz          szöveg (vemhes, babázik, stb.)
+  féreghajtás           több dátum
+  ezekből is több kell:
+    pároztatás            dátum
+    pár                   másik sün sorszáma
+    alom sorszáma         automatikus
+    alom neve             szöveg
+    kölykök               másik sünök sorszámai
+
+Kölyöknek:
+  alom sorszáma         automatikus
+  távozás               dátum
+  súly                  több érték dátum szerint rögzítve
+  féreghajtás           több dátum
+  gazdi                 szöveg
+  gazdi címe            szöveg
+  gazdi e-mail címe     szöveg
+  gazdi telefonszáma    szöveg
+  gazdival tegeződés    igen/nem
+  tenyészetbe ment      igen/nem (a többi csak akkor kell, ha igen)
+  tulajdonos tenyészet  szöveg
+  pároztatás            dátum
+  pár                   másik sün sorszáma
+  kölykök               másik sünök sorszámai
+
+Vendégnek:
+
+Felmenőnek:
