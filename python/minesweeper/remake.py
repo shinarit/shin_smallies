@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#########################################
-##  minesweeper with custom tiled grid ##
-##     author: tetra666@gmail.com      ##
-#########################################
+##########################################
+##  minesweeper with custom tiled grid  ##
+##      author: tetra666@gmail.com      ##
+##########################################
 
 from Tkinter import *
 
 class Field:
+  grid = {}
   def __init__(self, isbomb, isvisible):
     self.isbomb = isbomb
     self.isvisible = isvisible
@@ -29,13 +30,18 @@ class Field:
       #calculate
       pass
     return self.bombs
+  
+  
 
   #static method
-  #generates a grid from an abstract size value
+  #generates a grid from an abstract size value (which is grid-dependent)
   #returns the "root" of the generated graph, it should be the middle element, but doesn't matter
   @staticmethod
   def buildGrid(size):
     return None    
 
-  
+
+class SquareField(Field):
+  def __init__(self, isbomb, isvisible):
+
 
