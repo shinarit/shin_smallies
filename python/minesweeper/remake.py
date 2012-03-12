@@ -59,16 +59,23 @@ class Field:
 
   #rectangle: (left, top, width, height)
   #the screen it should draw in
-  @staticmethod
-  def drawAll(canvas, rectangle):
-    dummy = Field.grid.itervalues().next()
-    size = dummy.getSize((rectangle[2], rectangle[3]))
+  @classmethod
+  def drawAll(cls, canvas, rectangle):
+    size = cls.getSize((rectangle[2], rectangle[3]))
 
     offset = (rectangle[0], rectangle[1])
-    canvas.create_polygon(dummy.getPolygon(offset, size), fill="red", outline="black")
     map(lambda (coord, field): canvas.create_polygon(field.getPolygon(offset, size), fill = 'red', outline = 'black'), Field.grid.iteritems())
-#    map(lambda (coord, field): field.draw(canvas, map(lambda c, o: o + c*size, coord, rectangle[0:2]), size), Field.grid.iteritems())
 
+  #coords are the offset-corrected values within the rectangle
+  #sizes are the (width, height) of the rectangle
+  @classmethod
+  def handleClick(cls, coords, sizes):
+    dummy = Field.grid.itervalues().next()
+    sizes = dummy.getSize(sizes)
+
+    field = findField(coords, sizes)
+    if field:
+      pass
 
 class SquareField(Field):
   DefSize = 100
