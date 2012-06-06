@@ -1,4 +1,7 @@
+#include <iostream>
+#include <vector>
 #include <cstring>
+#include <cstdlib>
 
 typedef int ValueType;
 
@@ -27,35 +30,21 @@ class MatrixExcludeIterator
     
     ValueType& operator*()
     {
-      return m_data[m_currRow * m_size + m_currColumn];
+      return m_data[m_currIndex];
     }
     
     MatrixExcludeIterator& operator++()
     {
-      ++m_currColumn;
-      if (m_size == m_currColumn)
-      {
-        m_currColumn = 0;
-        ++m_currRow;
-      }
-
-      if (m_columnToExclude == m_currColumn)
-      {
-        ++m_currColumn;
-        if (m_size == m_currColumn)
-        {
-          m_currColumn = 0;
-          ++m_currRow;
-        }
-      }
-
-      if (m_rowToExclude == m_currRow)
-      {
-        ++m_currRow;
-      }
+      Increment();
+      return *this;
     }
     
     MatrixExcludeIterator operator++(int)
+    {
+      MatrixExcludeIterator tmp = *this;
+      Increment();
+      return tmp;
+    }
   
   private:
     void Increment()
@@ -93,7 +82,7 @@ class SquareMatrix
     SquareMatrix(int size, Iter begin): m_size(size), m_data(new ValueType[size * size])
     {
       ValueType* runptr = &m_data[0];
-      for (int i(0); i < size * size; ++i;)
+      for (int i(0); i < size * size; ++i)
       {
         *runptr++ = *begin++;
       }
@@ -130,9 +119,17 @@ class SquareMatrix
         }
         default:
         {
-          ValueType res;
+          ValueType res = 0;
           
-          
+          int sign = 1;
+          for (int i(0); i<m_size; ++i)
+          {
+            SquareMatrix subMatrix(m_size - 1, MatrixExcludeIterator(m_size - 1, m_data, 0, i));
+            
+            res += sign * subMatrix.Determinant();
+
+            sign *= -1;
+          }
           
           return res;
         }
@@ -145,7 +142,18 @@ class SquareMatrix
 };
 
 
-int main()
+int main(int argc, char* argv[])
 {
+  std::vector<ValueType> vec;
+  ValueType num;
+  int size = std::atoi(argv[1]);
+  for (int i(0); i < size * size; ++i)
+  {
+    std::cin >> num;
+    vec.push_back(num);
+  }
+  
+  SquareMatrix matr(size, &vec[0]);
+  std::cout << matr.Determinant() << '\n';
 }
 
