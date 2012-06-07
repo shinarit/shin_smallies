@@ -110,13 +110,15 @@ class SquareMatrix
         {
           return m_data[0] * m_data[3] - m_data[1] * m_data[2];
         }
+        
         case 3:
         {
           //sarrus
           SquareMatrix& a = *this;
-          return  a[1][1]*a[2][2]*a[3][3] + a[1][2]*a[2][3]*a[3][1] + a[1][3]*a[2][1]*a[3][2] -
-                  a[3][1]*a[2][2]*a[1][3] - a[3][2]*a[2][3]*a[1][1] - a[3][3]*a[2][1]*a[1][2];
+          return  a[0][0]*a[1][1]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*a[1][0]*a[2][1] -
+                  a[2][0]*a[1][1]*a[0][2] - a[2][1]*a[1][2]*a[0][0] - a[2][2]*a[1][0]*a[0][1];
         }
+        
         default:
         {
           ValueType res = 0;
@@ -126,7 +128,7 @@ class SquareMatrix
           {
             SquareMatrix subMatrix(m_size - 1, MatrixExcludeIterator(m_size - 1, m_data, 0, i));
             
-            res += sign * subMatrix.Determinant();
+            res += sign * m_data[i] * subMatrix.Determinant();
 
             sign *= -1;
           }
