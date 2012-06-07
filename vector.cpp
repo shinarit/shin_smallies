@@ -110,7 +110,7 @@ class SquareMatrix
         {
           return m_data[0] * m_data[3] - m_data[1] * m_data[2];
         }
-        
+        /*
         case 3:
         {
           //sarrus
@@ -118,7 +118,7 @@ class SquareMatrix
           return  a[0][0]*a[1][1]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*a[1][0]*a[2][1] -
                   a[2][0]*a[1][1]*a[0][2] - a[2][1]*a[1][2]*a[0][0] - a[2][2]*a[1][0]*a[0][1];
         }
-        
+        * */
         default:
         {
           ValueType res = 0;
@@ -126,9 +126,9 @@ class SquareMatrix
           int sign = 1;
           for (int i(0); i<m_size; ++i)
           {
-            SquareMatrix subMatrix(m_size - 1, MatrixExcludeIterator(m_size - 1, m_data, 0, i));
-            
-            res += sign * m_data[i] * subMatrix.Determinant();
+            res += sign * m_data[i] * Determinant(0, i);
+            std::cout << "res: " << res << " += ";
+            std::cout << sign << '*' << m_data[i] << '*' << Determinant(0, i) << '\n';
 
             sign *= -1;
           }
@@ -137,6 +137,33 @@ class SquareMatrix
         }
       }
     }
+    
+    ValueType Determinant(int row, int column)
+    {
+      if (1 == m_size || row > m_size || column > m_size)
+      {
+        throw -1;
+			}
+			
+			SquareMatrix tmp(m_size - 1, MatrixExcludeIterator(m_size - 1, m_data, row, column));//.Determinant();
+			std::cout << "orig:\n";
+			Print();
+			std::cout << row << ':' << column << '\n';
+			tmp.Print();
+      return tmp.Determinant();
+		}
+		
+		void Print() const
+		{
+			for (int i(0); i < m_size * m_size; ++i)
+			{
+				std::cout << m_data[i];
+				if (m_size - 1 == i % m_size)
+					std::cout << '\n';
+				else
+					std::cout << ' ';
+			}
+		}
 
   private:
     int         m_size;
