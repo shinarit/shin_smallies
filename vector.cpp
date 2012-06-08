@@ -110,7 +110,6 @@ class SquareMatrix
         {
           return m_data[0] * m_data[3] - m_data[1] * m_data[2];
         }
-        /*
         case 3:
         {
           //sarrus
@@ -118,7 +117,6 @@ class SquareMatrix
           return  a[0][0]*a[1][1]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[0][2]*a[1][0]*a[2][1] -
                   a[2][0]*a[1][1]*a[0][2] - a[2][1]*a[1][2]*a[0][0] - a[2][2]*a[1][0]*a[0][1];
         }
-        * */
         default:
         {
           ValueType res = 0;
@@ -127,8 +125,6 @@ class SquareMatrix
           for (int i(0); i<m_size; ++i)
           {
             res += sign * m_data[i] * Determinant(0, i);
-            std::cout << "res: " << res << " += ";
-            std::cout << sign << '*' << m_data[i] << '*' << Determinant(0, i) << '\n';
 
             sign *= -1;
           }
@@ -145,11 +141,7 @@ class SquareMatrix
         throw -1;
 			}
 			
-			SquareMatrix tmp(m_size - 1, MatrixExcludeIterator(m_size - 1, m_data, row, column));//.Determinant();
-			std::cout << "orig:\n";
-			Print();
-			std::cout << row << ':' << column << '\n';
-			tmp.Print();
+			SquareMatrix tmp(m_size - 1, MatrixExcludeIterator(m_size, m_data, row, column));//.Determinant();
       return tmp.Determinant();
 		}
 		
@@ -173,16 +165,29 @@ class SquareMatrix
 
 int main(int argc, char* argv[])
 {
-  std::vector<ValueType> vec;
-  ValueType num;
+	if (2 != argc)
+	{
+		std::cout << "usage: " << argv[0] << " <dimension of vectors>\n";
+	}
   int size = std::atoi(argv[1]);
-  for (int i(0); i < size * size; ++i)
+	
+  std::vector<ValueType> vec(size);
+  for (int i(0); i < size * (size - 1); ++i)
   {
+		ValueType num;
     std::cin >> num;
     vec.push_back(num);
   }
   
   SquareMatrix matr(size, &vec[0]);
-  std::cout << matr.Determinant() << '\n';
+  
+  std::cout << '(';
+  int sign = 1;
+  for (int i(0); i < size - 1; ++i)
+  {
+		std::cout << sign * matr.Determinant(0, i) << ", ";
+		sign *= -1;
+	}
+  std::cout << sign * matr.Determinant(0, size - 1) << ")\n";
 }
 
