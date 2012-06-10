@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 import cookielib
-from turulchan import Post
+from turulchan import Post, GetMaxSize
 from time import sleep
 
 from Tkinter import *
@@ -83,6 +83,7 @@ def csapasd():
   
   global progress
   
+  size = GetMaxSize(tablaVar.get(), cookies)
   for i, f in enumerate(files):
     value = float(i)/len(files)
     progress.set(value = value, text = f)
@@ -92,7 +93,7 @@ def csapasd():
       try:
 #        print 'Post(%s, %s, %s, cookies, %s, %s, %s)' % (tablaVar.get(), edits[0][1].get(), f, edits[1][1].get(), edits[2][1].get(), edits[3][1].get())
         print "Most megy:", f
-        Post(tablaVar.get(), edits[0][1].get(), f, cookies, edits[1][1].get(), edits[2][1].get(), edits[3][1].get())
+        Post(tablaVar.get(), edits[0][1].get(), f, cookies, edits[1][1].get(), edits[2][1].get(), edits[3][1].get(), password = edits[4][1].get(), max_size = size)
         done = True
       except Exception as e:
         err += 1
@@ -118,7 +119,7 @@ tablaOption = OptionMenu(gui, tablaVar, *tablak)
 tablaOption.grid(column = 1, row = rowc, sticky = W)
 rowc += 1
 
-cats = ('Fonák', 'Név', 'Email', 'Üzenet')
+cats = ('Fonák', 'Név', 'Email', 'Üzenet', 'Jelszó')
 edits = []
 for item in cats:
   var = StringVar()
