@@ -93,8 +93,11 @@ def csapasd():
       try:
 #        print 'Post(%s, %s, %s, cookies, %s, %s, %s)' % (tablaVar.get(), edits[0][1].get(), f, edits[1][1].get(), edits[2][1].get(), edits[3][1].get())
         print "Most megy:", f
-        Post(tablaVar.get(), edits[0][1].get(), f, cookies, edits[1][1].get(), edits[2][1].get(), edits[3][1].get(), password = edits[4][1].get(), max_size = size)
+        reply = Post(tablaVar.get(), edits[0][1].get(), f, cookies, edits[1][1].get(), edits[2][1].get(), edits[3][1].get(), password = edits[4][1].get(), max_size = size)
         done = True
+        if 'h1 style="font-size: 3em;">Error</h1>' in reply:
+          error = reply.split('<h2 style="font-size: 2em;font-weight: bold;text-align: center;">')[1].split('</h2>')[0].strip()
+          print "Hiba!",error
       except Exception as e:
         err += 1
         progress.set(value = value, text = '%s ujra: %d' % (f, err))
