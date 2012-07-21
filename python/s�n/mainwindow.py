@@ -25,11 +25,11 @@ class MainWindow(Frame):
     #ReadDB('sün', MainWindow.SunFile, self.sunok)
 
     #omnom
-    self.sunok = {1: {'Név' : (0, 'elso sun'), 'Tenyészet': (0, 'elso tenyeszet'), 'Nem': (3, (('Fiú', 'Lány'), 0))},
-                  2: {'Név' : (0, 'masodik sun'), 'Tenyészet': (0, 'masodik tenyeszet'), 'Nem': (3, (('Fiú', 'Lány'), 1))}}
+    self.sunok = {1: {'Név' : 'elso sun', 'Tenyészet': 'elso tenyeszet', 'Nem': (('Fiú', 'Lány'), 0), 'Apa': 2, 'Státusz': (('Saját', 'Kölyök', 'Vendég', 'Felmenő'), 0)},
+                  2: {'Név' : 'masodik sun', 'Tenyészet': 'masodik tenyeszet', 'Nem': (('Fiú', 'Lány'), 1), 'Anya': 1}}
     
     self.tbl = maintable.Table(self)
-    self.tbl.Initialize(zip(self.cfg['desiredattributes']), self.sunok.itervalues())
+    self.tbl.Initialize(self.cfg['desiredattributes'], self.sunok)
     self.tbl.grid(row = 1, column = 0, columnspan = len(self.cfg['desiredattributes']))
     
     self.newsunbtn = Button(self, text = "Új sün felvétele", command = self.AddNewHedgie)
@@ -46,7 +46,6 @@ class MainWindow(Frame):
   def AddNewHedgie(self):
     if not self.editsunwnd:
       self.editsunwnd = editwindow.EditWindow(self.PrepareHedgieEdit(templates.Empty.HedgehogBasic.copy()), self.AddHedgieClosed)
-#      self.editsunwnd = editwindow.EditWindow({'xd': (3, (['1', '2', '3'], -1)), 'ID': (4, '15')}, self.AddHedgieClosed)
       self.editsunwnd.grid()
     else:
       self.editsunwnd.focus_set()
@@ -86,8 +85,8 @@ class MainWindow(Frame):
 
   def GetBoysGirls(self, hdg):
     delimiter = ' | '
-    fiuk    = [delimiter.join((sun['Név'][1], sun['Tenyészet'][1])) for sun in self.sunok.itervalues() if sun['Nem'][1][0][sun['Nem'][1][1]] == 'Fiú']
-    lanyok  = [delimiter.join((sun['Név'][1], sun['Tenyészet'][1])) for sun in self.sunok.itervalues() if sun['Nem'][1][0][sun['Nem'][1][1]] == 'Lány']
+    fiuk    = [delimiter.join((sun['Név'], sun['Tenyészet'])) for sun in self.sunok.itervalues() if sun['Nem'][0][sun['Nem'][1]] == 'Fiú']
+    lanyok  = [delimiter.join((sun['Név'], sun['Tenyészet'])) for sun in self.sunok.itervalues() if sun['Nem'][0][sun['Nem'][1]] == 'Lány']
     fiuk.sort()
     lanyok.sort()
     print fiuk

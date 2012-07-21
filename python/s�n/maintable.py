@@ -17,25 +17,31 @@ class Table(Tkinter.Frame):
     self.labels = {}
 
   #
-  # header: [(attr_to_show [, name to show])*]  must be list
-  # data: [{'attr': value}*]  can be iterable
+  # toShow: [attr_to_show]
+  # data: [{id: {'attr': value}}]
   #
-  def Initialize(self, header, data):
-    toShow = [item[0] for item in header]
-    for column, item in enumerate(header):
-      self.labels[(0, column)] = LabelWidget(self, column, 0, item[-1])
-    for row, dict in enumerate(data):
+  def Initialize(self, toShow, data):
+    for column, item in enumerate(toShow):
+      self.labels[(0, column)] = LabelWidget(self, column, 0, item)
+    for row, sun in enumerate(data.iteritems()):
       for column, attr in enumerate(toShow):
-        if attr in dict:
-          self.labels[(row + 1, column)] = LabelWidget(self, column, row + 1, str(dict[attr]))
-
+        if attr in sun[1]:
+          self.labels[(row + 1, column)] = LabelWidget(self, column, row + 1, self.GetAttribute(attr, sun[1], data))
+   
+  def GetAttribute(self, attr, sun, suns):
+    if 'Nem' == attr or 'Státusz' == attr:                       #list types
+      return sun[attr][0][sun[attr][1]]
+    if 'Apa' == attr or 'Anya' == attr:     #other hedgehogs
+      return suns[sun[attr]]['Név']
+    return str(sun[attr])
+    
   def Clear(self):
     map(Label.destroy, self.labels.itervalues())
     self.labels.clear()
 
-  def Reinitialize(self, header, data):
+  def Reinitialize(self, toShow, data):
     self.Clear()
-    self.Initialize(header, data)
+    self.Initialize(toShow, data)
 
 
 textFont1 = ("Arial", 10, "bold italic")
