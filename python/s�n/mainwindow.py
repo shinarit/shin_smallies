@@ -25,8 +25,8 @@ class MainWindow(Frame):
     #ReadDB('sün', MainWindow.SunFile, self.sunok)
 
     #omnom
-    self.sunok = {1: {'Név' : 'elso sun', 'Tenyészet': 'elso tenyeszet', 'Nem': (('Fiú', 'Lány'), 0), 'Apa': 2, 'Státusz': (('Saját', 'Kölyök', 'Vendég', 'Felmenő'), 0)},
-                  2: {'Név' : 'masodik sun', 'Tenyészet': 'masodik tenyeszet', 'Nem': (('Fiú', 'Lány'), 1), 'Anya': 1}}
+    self.sunok = {1: {'Név' : 'első sun', 'Tenyészet': 'elso tenyeszet', 'Nem': (('Fiú', 'Lány'), 0), 'Apa': 2, 'Státusz': (('Saját', 'Kölyök', 'Vendég', 'Felmenő'), 0)},
+                  2: {'Név' : 'masodik sün', 'Tenyészet': 'masodik tenyeszet', 'Nem': (('Fiú', 'Lány'), 1), 'Anya': 1}}
     
     self.tbl = maintable.Table(self)
     self.tbl.Initialize(self.cfg['desiredattributes'], self.sunok)
@@ -52,6 +52,18 @@ class MainWindow(Frame):
   
   def AddHedgieClosed(self, val):
     print val
+    self.PostProcessHedgie(val)
+    print ''
+    print val
+    keys = self.sunok.keys()
+    if 0 == len(keys):
+      key = 0
+    else:
+      keys.sort()
+      key = keys[-1] + 1
+    print key
+    self.sunok[key] = val
+    self.tbl.Reinitialize(self.cfg['desiredattributes'], self.sunok)
     
     self.editsunwnd = None
 
@@ -84,20 +96,20 @@ class MainWindow(Frame):
       return None
 
   def GetBoysGirls(self, hdg):
-    delimiter = ' | '
-    fiuk    = [delimiter.join((sun['Név'], sun['Tenyészet'])) for sun in self.sunok.itervalues() if sun['Nem'][0][sun['Nem'][1]] == 'Fiú']
-    lanyok  = [delimiter.join((sun['Név'], sun['Tenyészet'])) for sun in self.sunok.itervalues() if sun['Nem'][0][sun['Nem'][1]] == 'Lány']
+    self.delimiter = ' | '
+    fiuk    = [self.delimiter.join((sun['Név'], sun['Tenyészet'])) for sun in self.sunok.itervalues() if sun['Nem'][0][sun['Nem'][1]] == 'Fiú']
+    lanyok  = [self.delimiter.join((sun['Név'], sun['Tenyészet'])) for sun in self.sunok.itervalues() if sun['Nem'][0][sun['Nem'][1]] == 'Lány']
     fiuk.sort()
     lanyok.sort()
     print fiuk
     print lanyok
 
     try:
-      fiuk.remove(delimiter.join((hdg['Név'][1], hdg['Tenyészet'][1])))
+      fiuk.remove(self.delimiter.join((hdg['Név'][1], hdg['Tenyészet'][1])))
     except ValueError:
       pass
     try:
-      lanyok.remove(delimiter.join((hdg['Név'][1], hdg['Tenyészet'][1])))
+      lanyok.remove(self.delimiter.join((hdg['Név'][1], hdg['Tenyészet'][1])))
     except ValueError:
       pass
 
@@ -137,3 +149,35 @@ class MainWindow(Frame):
     hdg['Anya'] = (3, (lanyok, anya))
     
     return hdg
+
+  def ReplaceParent(self, which, hdg):
+    if -1 != hdg[which][1]:
+      name, breed = hdg[which][0][hdg[which][1]].split(self.delimiter)
+      apa = next((sun for sun in self.sunok.iteritems() if sun[1]['Név'] == name and sun[1]['Tenyészet'] == breed), None)
+      if apa:
+        hdg[which] = apa[0]
+      else:
+        hdg.pop(which)
+    else:
+      hdg.pop(which)
+    
+  def PostProcessHedgie(self, hdg):
+    self.ReplaceParent('Apa', hdg)
+    self.ReplaceParent('Anya', hdg)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

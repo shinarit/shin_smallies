@@ -20,8 +20,8 @@ class Empty:
     'Nem'                     : (3, (('Fiú', 'Lány'), -1)),
     'Státusz'                 : (4, ''),                      #set when created Saját, Kölyök, Vendég, Felmenő
     'Egyéb'                   : (1, ''),
-    'Tartózkodás'             : (3, (('Otthon', 'Máshol'), -1)),
-    'Féreghajtás'             : (0, '')                       #2011.11.11;*
+    'Tartózkodás'             : (3, (('Otthon', 'Máshol'), -1))
+#    'Féreghajtás'             : (0, '')                       #2011.11.11;*
   }
   #prepare: Apa, Anya, Státusz, Féreghajtás
   #process: Apa, Anya
