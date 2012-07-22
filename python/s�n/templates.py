@@ -18,7 +18,6 @@ class Empty:
     'Anya'                    : (3, ((), -1)),                #create list on creation, store value otherwise ('név | tenyészet',)
     'Szín'                    : (0, ''),
     'Nem'                     : (3, (('Fiú', 'Lány'), -1)),
-    'Státusz'                 : (4, ''),                      #set when created Saját, Kölyök, Vendég, Felmenő
     'Egyéb'                   : (1, ''),
     'Tartózkodás'             : (3, (('Otthon', 'Máshol'), -1))
 #    'Féreghajtás'             : (0, '')                       #2011.11.11;*
@@ -29,8 +28,8 @@ class Empty:
   HedgehogOwn = {
     'Érkezés'                 : (2, ''),
     'Távozás'                 : (2, ''),
-    'Súly'                    : (1, ''),                      #2011.11.11:240[:státusz];*
-    'Féreghajtás'             : (0, '')                       #2011.11.11;*
+    'Súly'                    : (0, ''),                      #2011.11.11:240[:státusz];*
+    'Státusz'                 : (4, 'Saját')                  #set when created Saját, Kölyök, Vendég, Felmenő
   }
   
   HedgehogChild = {
@@ -43,7 +42,8 @@ class Empty:
     'Gazdi telefonszáma'      : (0, ''),
     'Gazdival tegeződés'      : (3, (('Igen', 'Nem'), -1)),
     'Tenyészetbe ment'        : (3, (('Igen', 'Nem'), -1)),
-    'Tenyészet neve'          : (0, '')
+    'Tenyészet neve'          : (0, ''),
+    'Státusz'                 : (4, 'Kölyök')
   }
   
   HedgehogLitter = {

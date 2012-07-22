@@ -25,7 +25,7 @@ class MainWindow(Frame):
     #ReadDB('sün', MainWindow.SunFile, self.sunok)
 
     #omnom
-    self.sunok = {1: {'Név' : 'első sun', 'Tenyészet': 'elso tenyeszet', 'Nem': (('Fiú', 'Lány'), 0), 'Apa': 2, 'Státusz': (('Saját', 'Kölyök', 'Vendég', 'Felmenő'), 0)},
+    self.sunok = {1: {'Név' : 'első sun', 'Tenyészet': 'elso tenyeszet', 'Nem': (('Fiú', 'Lány'), 0), 'Apa': 2},
                   2: {'Név' : 'masodik sün', 'Tenyészet': 'masodik tenyeszet', 'Nem': (('Fiú', 'Lány'), 1), 'Anya': 1}}
     
     self.tbl = maintable.Table(self)
@@ -45,7 +45,7 @@ class MainWindow(Frame):
 
   def AddNewHedgie(self):
     if not self.editsunwnd:
-      self.editsunwnd = editwindow.EditWindow(self.PrepareHedgieEdit(templates.Empty.HedgehogBasic.copy()), self.AddHedgieClosed)
+      self.editsunwnd = editwindow.EditWindow(self.PrepareHedgieEdit(dict(templates.Empty.HedgehogBasic.items() + templates.Empty.HedgehogOwn.items())), self.AddHedgieClosed)
       self.editsunwnd.grid()
     else:
       self.editsunwnd.focus_set()
