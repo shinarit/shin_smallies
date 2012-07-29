@@ -25,24 +25,21 @@ class Table(Tkinter.Frame):
       self.labels[(0, column)] = LabelWidget(self, column, 0, item)
     for row, sun in enumerate(data.iteritems()):
       for column, attr in enumerate(toShow):
-        if attr in sun[1]:
-          self.labels[(row + 1, column)] = LabelWidget(self, column, row + 1, self.GetAttribute(attr, sun[1], data))
+        self.labels[(row + 1, column)] = LabelWidget(self, column, row + 1, self.GetAttribute(attr, sun[1], data))
    
   def GetAttribute(self, attr, sun, suns):
+    if not attr in sun:
+      return ''
     print attr, ": ", sun[attr]
     if 'Nem' == attr or 'Tartózkodás' == attr:                       #list types
       index = sun[attr][1]
       if -1 != index:
-        ret = sun[attr][0][index]
+        return sun[attr][0][index]
       else:
-        ret = ''
+        return ''
     elif 'Apa' == attr or 'Anya' == attr:     #other hedgehogs
-      ret = suns[sun[attr]]['Név']
-    else:
-      ret = sun[attr]
-    if '' == ret:
-      sun.pop(attr)
-    return ret
+      return suns[sun[attr]]['Név']
+    return sun[attr]
     
   def Clear(self):
     map(LabelWidget.destroy, self.labels.itervalues())
