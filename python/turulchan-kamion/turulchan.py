@@ -14,15 +14,14 @@ from util import *
 def Post(board, reply, _file, cookies, name, email, text, password = 'kamion', proxy = None, max_size = "2560000", url = "http://turulchan.net/board.php"):
     """Post to imageboard. 
     cookies should be a CookieJar from cookielib, or eqvivalent."""
-    if str(reply)=='0': return False
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies))
-    if proxy:
-        opener.add_handler(urllib2.ProxyHandler({'http':proxy}))
+    if str(reply)=='0': return """<h1 style="font-size: 3em;">Error</h1>
+<h2 style="font-size: 2em;font-weight: bold;text-align: center;">Error!</h2>"""
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies),
+                                    MultipartPostHandler)
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     params={'board':board, 'replythread':reply, 'MAX_FILE_SIZE': max_size,  
   "email":'', "name":name, 'em':email, 'message':text, 'postpassword':password}
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies),
-                                  MultipartPostHandler)
+    #opener.add_handler(MultipartPostHandler)
     if proxy:
         opener.add_handler(urllib2.ProxyHandler({'http':proxy}))
     if (_file):
