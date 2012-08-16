@@ -1,0 +1,14 @@
+
+
+pythonos turulcsen kamion
+
+Használat:
+	python kamoin.py [kapcsolók]
+
+Kapcsolók:
+	-np vagy --nopause:	Hiba esetén folytatja a feltöltést.
+	-a vagy --abort:	Hiba esetén megszakítja a feltöltést.
+
+	Alapesetben hiba esetén felugró üzenettel tájékoztatja a felhasználót a
+	hibaüzenetről, majd folytatja a következő fájl feltöltésével.
+	Csak szerveroldali hibákat kezel!
