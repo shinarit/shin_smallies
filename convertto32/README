@@ -1,0 +1,4 @@
+attempt at converting 24 bit bmp files to 32 bit ones
+not successful so far, and not really actual anymore
+
+using SDL
