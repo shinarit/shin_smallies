@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <set>
+#include <map>
 
 class Result
 {
@@ -66,14 +66,15 @@ int main(int argc, char* argv[])
   uint64_t max(1 << ((groupSize * (groupSize - 1) / 2)));
 
   std::cout << "max: " << max << '\n';
-  std::set<Result> results;
+  std::map<Result, int> results;
   for (uint64_t i(0); i < max; ++i)
   {
-    results.insert(Result(groupSize, i));
+    ++results[Result(groupSize, i)];
   }
   std::cout << "number of results: " << results.size() << '\n';
   for (const auto& result: results)
   {
-    std::cout << result << '\n';
+    std::cout << "occurrence: " << result.second << ", percent: " << result.second * 100.0f / max << '\n';
+    std::cout << result.first << '\n';
   }
 }
