@@ -1,0 +1,4 @@
+this folder contains small projects of every kind, mostly developed in C++ and Python, without any order whatsoever
+
+lotto_stat: a very neat solution for picking N objects from a pool with even distribution in guaranteed finite time
+vector: cross product for N dimension vectors
