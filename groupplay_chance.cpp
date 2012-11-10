@@ -71,10 +71,16 @@ int main(int argc, char* argv[])
   {
     ++results[Result(groupSize, i)];
   }
+
+  std::vector<std::pair<int, Result>> swappedVector;
+  std::transform(begin(results), end(results), std::back_inserter<std::vector<std::pair<int, Result>>>(swappedVector), [](std::pair<Result, int> pair) {return std::make_pair(pair.second, pair.first);});
+  std::sort(begin(swappedVector), end(swappedVector));
+
   std::cout << "number of results: " << results.size() << '\n';
-  for (const auto& result: results)
+
+  for (const auto& result: swappedVector)
   {
-    std::cout << "occurrence: " << result.second << ", percent: " << result.second * 100.0f / max << '\n';
-    std::cout << result.first << '\n';
+    std::cout << "occurrence: " << result.first << ", percent: " << result.first * 100.0f / max << '\n';
+    std::cout << result.second << '\n';
   }
 }
