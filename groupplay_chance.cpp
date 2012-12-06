@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream& out, const Result& res)
   int groupSize(res.groupSize());
   for (int i(0); i < groupSize; ++i)
   {
-    out << res.getResult(i) << " : " << groupSize - 1 - res.getResult(i) << '\n';
+    out << groupSize - 1 - res.getResult(i) << " : " << res.getResult(i) << '\n';
   }
   return out;
 }
