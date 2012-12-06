@@ -1,14 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+
 """Module containing GUI for the image dumper.
 """
+
 import cookielib
 from turulchan import Post, GetMaxSize
 from time import sleep
 from Tkinter import *
+
 import tkFileDialog, tkMessageBox
 import os
 import Tkinter
+import threading
 
 class Meter(Tkinter.Frame):
     def __init__(self, master, width=300, height=20, bg='white', fillcolor='orchid1',\
@@ -55,23 +59,22 @@ class Meter(Tkinter.Frame):
         self._canv.itemconfigure(self._text, text=text)
         self._canv.update_idletasks()
 
-#/ezt külön fájlba kéne pakolni, de úgy nehezebb a terjesztés :C
+        
 
-class KamionGUI:
+class Csapato(threading.Thread):
+    """class so uploading is interactive"""
+    def __init__(self, tablaVar, files, progress, edits, on_error, abort):
+        self.tablaVar = tablaVar
+        self.files = files
+        self.progress = progress
+        self.edits = edits
+        self.on_error = on_error
+        self.abort = abort
+        self.cookies=cookielib.CookieJar()
+        
+        threading.Thread.__init__( self )
 
-    def SelectFiles(self):
-        """Show file selecting dialog."""
-        res = tkFileDialog.askopenfilenames(parent = self.gui, title = 'Fájlok. Elég uncsi.')
-        self.files = [file for file in self.tk.tk.splitlist(res)]
-        self.files.sort()
-
-    def SelectDir(self):
-        """Show ditectory selecting dialog."""
-        res = tkFileDialog.askdirectory(parent = self.gui, title = 'Könyvtárválasztós dialógus. Húúúúú.')
-        self.files = [res + '/' + file for file in os.listdir(res)]  
-        self.files.sort()
-
-    def csapasd(self):
+    def run(self):
         """Do uploading."""
         size = GetMaxSize(self.tablaVar.get(), self.cookies)
         fail = 0
@@ -108,6 +111,25 @@ class KamionGUI:
                     print e
                     sleep(10)
         self.progress.set(value = 0.0, text = 'Sikeresen elküldve: %d Sikertelen: %d'%(good,fail))
+        
+        
+class KamionGUI:
+    def SelectFiles(self):
+        """Show file selecting dialog."""
+        res = tkFileDialog.askopenfilenames(parent = self.gui, title = 'Fájlok. Elég uncsi.')
+        self.files = [file for file in self.tk.tk.splitlist(res)]
+        self.files.sort()
+
+    def SelectDir(self):
+        """Show ditectory selecting dialog."""
+        res = tkFileDialog.askdirectory(parent = self.gui, title = 'Könyvtárválasztós dialógus. Húúúúú.')
+        self.files = [res + '/' + file for file in os.listdir(res)]  
+        self.files.sort()
+#(self, tablaVar, files, progress, edits, on_error, abort):
+    def csapasd(self):
+        """Do uploading."""
+        cs = Csapato(self.tablaVar, self.files, self.progress, self.edits, self.on_error, self.abort)
+        cs.start()
 
     def PauseOnError(self,value):
         """Toggle showing of error dialog, which pauses dumping."""
@@ -121,7 +143,6 @@ class KamionGUI:
         """Build GUI."""
         self.tablak = ('a', 'b', 'c', 'd', 'diy', 'f', 'g', 'int', 'k', 'm', 'p', 't', 'v', 'w', 'x', 'z', 'h', 's')
         self.files = []
-        self.cookies=cookielib.CookieJar()
         self.on_error = True # pause on error
         self.abort = False # abort on error
         self.tk = Tk()
