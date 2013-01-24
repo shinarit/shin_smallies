@@ -20,9 +20,8 @@ for n in num:
     min = float(szam[n])
 
 min = float(min)
-max = float(len(karakterek) - 2)
 if min < max:
-  base = (min + max) / 2.0
+  base = min
 
   diff = calc(num, base)
   print "diff: %d, dec: %d" % (diff, dec)
@@ -30,11 +29,11 @@ if min < max:
   steps = 0
   while abs(diff - dec) > 0.1:
     if diff > dec:
-      max, base = base, (min + base) / 2.0
+      base = (min + base) / 2.0
     else:
-      min, base = base, (max + base) / 2.0
+      min, base = base, base * 2.0
     diff = calc(num, base)
-    print "diff: %f, min: %f, max: %f" % (diff, min, max)
+    print "diff: %f, min: %f, base: %f" % (diff, min, base)
     steps += 1
 
   print "%f in %d steps" % (base, steps)
