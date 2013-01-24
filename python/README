@@ -2,3 +2,4 @@ the python projects
 
 networking: a pilot server-client based networking system, that acts transparently as a distributed one
 rename: sed-like utility
+basefinder: finds the base of a number, given the number itself and its value in decimal
