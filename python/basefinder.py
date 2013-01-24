@@ -14,26 +14,25 @@ def calc(num, base):
 
 num = sys.argv[1]
 dec = int(sys.argv[2])
-min = 2.0
+min = 1.0
 for n in num:
   if szam[n] > min:
-    min = float(szam[n])
+    min = float(szam[n]) + 1
 
-min = float(min)
 if min < max:
   base = min
 
   diff = calc(num, base)
-  print "diff: %d, dec: %d" % (diff, dec)
+  print "diff: %f, dec: %f" % (diff, float(dec))
+  if diff <= dec:
+    steps = 0
+    while abs(diff - dec) > 0.1:
+      if diff > dec:
+        base = (min + base) / 2.0
+      else:
+        min, base = base, base * 2.0
+      diff = calc(num, base)
+      print "diff: %f, min: %f, base: %f" % (diff, min, base)
+      steps += 1
 
-  steps = 0
-  while abs(diff - dec) > 0.1:
-    if diff > dec:
-      base = (min + base) / 2.0
-    else:
-      min, base = base, base * 2.0
-    diff = calc(num, base)
-    print "diff: %f, min: %f, base: %f" % (diff, min, base)
-    steps += 1
-
-  print "%f in %d steps" % (base, steps)
+    print "%f in %d steps" % (base, steps)
