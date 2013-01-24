@@ -19,20 +19,19 @@ for n in num:
   if szam[n] > min:
     min = float(szam[n]) + 1
 
-if min < max:
-  base = min
+base = min
 
-  diff = calc(num, base)
-  print "diff: %f, dec: %f" % (diff, float(dec))
-  if diff <= dec:
-    steps = 0
-    while abs(diff - dec) > 0.1:
-      if diff > dec:
-        base = (min + base) / 2.0
-      else:
-        min, base = base, base * 2.0
-      diff = calc(num, base)
-      print "diff: %f, min: %f, base: %f" % (diff, min, base)
-      steps += 1
+diff = calc(num, base)
+print "diff: %f, dec: %f" % (diff, float(dec))
+if diff <= dec:
+  steps = 0
+  while abs(diff - dec) > 0.1:
+    if diff > dec:
+      base = (min + base) / 2.0
+    else:
+      min, base = base, base * 2.0
+    diff = calc(num, base)
+    print "diff: %f, min: %f, base: %f" % (diff, min, base)
+    steps += 1
 
-    print "%f in %d steps" % (base, steps)
+  print "%f in %d steps" % (base, steps)
