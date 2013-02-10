@@ -63,14 +63,15 @@ class Meter(Tkinter.Frame):
 
 class Csapato(threading.Thread):
     """class so uploading is interactive"""
-    def __init__(self, tablaVar, files, progress, edits, on_error, abort):
+    def __init__(self, tablaVar, files, progress, edits, on_error, abort, sendButton):
         self.tablaVar = tablaVar
-        self.files = files
+        self.files = files[:]
         self.progress = progress
         self.edits = edits
         self.on_error = on_error
         self.abort = abort
         self.cookies=cookielib.CookieJar()
+        self.sendButton = sendButton
         
         threading.Thread.__init__( self )
 
@@ -111,6 +112,7 @@ class Csapato(threading.Thread):
                     print e
                     sleep(10)
         self.progress.set(value = 0.0, text = 'Sikeresen elküldve: %d Sikertelen: %d'%(good,fail))
+        self.sendButton.config(state = NORMAL)
         
         
 class KamionGUI:
@@ -128,7 +130,9 @@ class KamionGUI:
 #(self, tablaVar, files, progress, edits, on_error, abort):
     def csapasd(self):
         """Do uploading."""
-        cs = Csapato(self.tablaVar, self.files, self.progress, self.edits, self.on_error, self.abort)
+        self.sendButton.config(state = DISABLED)
+        cs = Csapato(self.tablaVar, self.files, self.progress, self.edits, self.on_error, self.abort, self.sendButton)
+        self.files = []
         cs.start()
 
     def PauseOnError(self,value):
@@ -173,8 +177,8 @@ class KamionGUI:
         dirButton = Button(self.gui, text = 'Hol vannak a könyvtáraim?', command = self.SelectDir)
         dirButton.grid(column = 1, row = rowc)
         rowc += 1
-        sendButton = Button(self.gui, text = 'Szállj szállj, szabad madár!', command = self.csapasd)
-        sendButton.grid(column = 0, columnspan = 2, row = rowc)
+        self.sendButton = Button(self.gui, text = 'Szállj szállj, szabad madár!', command = self.csapasd)
+        self.sendButton.grid(column = 0, columnspan = 2, row = rowc)
         rowc += 1
         self.progress = Meter(self.gui, fillcolor = 'green', text = 'Ó, miért váratsz...')
         self.progress.grid(column = 0, columnspan = 2, row = rowc)
