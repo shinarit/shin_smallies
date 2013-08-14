@@ -4,27 +4,46 @@
 import os
 import sys
 import hashlib
+import threading
 
-def makeHash(filepath):
-  return 0
-
-path = sys.argv[1]
-delete = False
-if len(sys.argv) > 2:
-  delete = bool(sys.argv[2])
-files = [ os.path.join(path, file) for file in os.listdir(path) if os.path.isfile(os.path.join(path, file)) ]
+NUM_OF_THREADS = 8
 
 hashes = {}
 
+class hashChecker(threading.Thread):
+  def __init__(self, filename):
+    threading.Thread.__init__(self)
+    self.filename = filename
+  
+  def run(self):
+    global hashes
+    with open(self.filename, 'rb') as f:
+      data = f.read()
+    md5 = hashlib.md5(data)
+    hash = md5.digest()
+    if hash in hashes:
+      hashes[hash].append(file)
+    else:
+      hashes[hash] = [file]
+
+
+path = sys.argv[1]
+delete = len(sys.argv) > 2
+
+files = [ os.path.join(path, file) for file in os.listdir(path) if os.path.isfile(os.path.join(path, file)) ]
+
 for file in files:
-  with open(file, 'rb') as f:
-    data = f.read()
-  md5 = hashlib.md5(data)
-  hash = md5.digest()
-  if hash in hashes:
-    hashes[hash].append(file)
+  t = hashChecker(file)
+  t.start()
+
+mainthread = threading.current_thread()
+threads = threading.enumerate()
+while len(threads) > 1:
+  if mainthread == threads[0]:
+    threads[-1].join()
   else:
-    hashes[hash] = [file]
+    threads[0].join()
+  threads = threading.enumerate()
 
 found = False
 for lists in hashes.itervalues():
